@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SeatsSuggestions
 {
-    public class AuditoriumSeating
+    public struct AuditoriumSeating
     {
         public IReadOnlyDictionary<string, Row> Rows => _rows;
 
@@ -26,6 +27,15 @@ namespace SeatsSuggestions
             }
 
             return new SeatingOptionNotAvailable(partyRequested, pricingCategory);
+        }
+
+
+
+        public override bool Equals(object obj)
+        {
+            var secondAuditoriumSeating = (AuditoriumSeating)obj;
+
+            return this.Rows.Values.ToList().TrueForAll(row => secondAuditoriumSeating.Rows.Values.Contains(row));
         }
     }
 }

@@ -46,7 +46,8 @@ namespace SeatsSuggestions
                 {
                     foreach (var seat in seatAllocation.Seats)
                     {
-                        seat.Allocate();
+                        //return new allocation with new seat.
+                        seatAllocation.AddSeat(seat.Allocate());
                     }
 
                     foundedSuggestions.Add(new SuggestionMade(partyRequested, pricingCategory, seatAllocation.Seats));
