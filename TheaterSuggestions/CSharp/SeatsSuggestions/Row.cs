@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Value;
 
@@ -12,22 +13,34 @@ namespace SeatsSuggestions
         public Row(string name, List<Seat> seats)
         {
             Name = name;
-            Seats = seats;
+            Seats = SetPreferencesToSeats(seats);
+        }
+
+        private List<Seat> SetPreferencesToSeats(List<Seat> seats)
+        {
+            var length = seats.Count();
+            var middle = (length + 1) / 2;
+            var seatsByPreference = seats
+                .Select(seat => seat.SetPreference(Math.Abs(middle - seat.Number)));
+            return seatsByPreference.ToList();
         }
 
         public Row AddSeat(Seat seat)
         {
             var updatedList = Seats.Select(s => s == seat ? seat : s).ToList();
 
-            return new Row(Name, updatedList);
+            return new Row(Name, SetPreferencesToSeats(updatedList));
         }
 
         public SeatingOptionSuggested SuggestSeatingOption(SuggestionRequest suggestionRequest)
         {
             var seatingOptionSuggested = new SeatingOptionSuggested(suggestionRequest);
 
-            foreach (var seat in SelectAvailableSeatsCompliantWith(suggestionRequest.PricingCategory))
+            var availableSeats = SelectAvailableSeatsCompliantWith(suggestionRequest.PricingCategory);
+            var orderedSeats = availableSeats.OrderBy(seat => seat.PreferenceScore);
+            foreach (var seat in orderedSeats)
             {
+                //if IsneighborAtLeastOne(seatingOptionSuggested)
                 seatingOptionSuggested.AddSeat(seat);
 
                 if (seatingOptionSuggested.MatchExpectation())
@@ -41,7 +54,8 @@ namespace SeatsSuggestions
 
         private IEnumerable<Seat> SelectAvailableSeatsCompliantWith(PricingCategory pricingCategory)
         {
-            return Seats.Where(s => s.IsAvailable() && s.MatchCategory(pricingCategory));
+            return Seats
+                .Where(s => s.IsAvailable() && s.MatchCategory(pricingCategory));
         }
 
         public Row Allocate(Seat seat)

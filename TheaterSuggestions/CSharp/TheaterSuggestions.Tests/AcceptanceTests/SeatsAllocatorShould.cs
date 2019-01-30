@@ -55,11 +55,11 @@ namespace SeatsSuggestions.Tests.AcceptanceTests
 
             var suggestionsMade = seatAllocator.MakeSuggestions(showId, partyRequested);
 
-            Check.That(suggestionsMade.SeatNames(PricingCategory.First)).ContainsExactly("A3", "A4", "A5");
-            Check.That(suggestionsMade.SeatNames(PricingCategory.Second)).ContainsExactly("A1", "A2", "A9");
-            Check.That(suggestionsMade.SeatNames(PricingCategory.Third)).ContainsExactly("E1", "E2", "E3");
+            Check.That(suggestionsMade.SeatNames(PricingCategory.First)).Contains("A4", "A5", "A6").Only();
+            Check.That(suggestionsMade.SeatNames(PricingCategory.Second)).Contains("A1", "A2", "A9").Only();
+            Check.That(suggestionsMade.SeatNames(PricingCategory.Third)).Contains("E4", "E5", "E6").Only();
 
-            Check.That(suggestionsMade.SeatNames(PricingCategory.Mixed)).ContainsExactly("A1", "A2", "A3");
+            Check.That(suggestionsMade.SeatNames(PricingCategory.Mixed)).Contains("A4", "A5", "A6").Only();
         }
 
         [Test]

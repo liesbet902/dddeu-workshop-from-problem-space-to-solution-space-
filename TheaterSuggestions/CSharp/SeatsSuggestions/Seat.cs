@@ -5,18 +5,20 @@ namespace SeatsSuggestions
 {
     public class Seat : ValueType<Seat>
     {
-        public Seat(string rowName, uint number, PricingCategory pricingCategory, SeatAvailability seatAvailability)
+        public Seat(string rowName, uint number, PricingCategory pricingCategory, SeatAvailability seatAvailability, long preferenceScore = 0)
         {
             RowName = rowName;
             Number = number;
             PricingCategory = pricingCategory;
             SeatAvailability = seatAvailability;
+            PreferenceScore = preferenceScore;
         }
 
         public string RowName { get; }
         public uint Number { get; }
         public PricingCategory PricingCategory { get; }
         public SeatAvailability SeatAvailability { get; }
+        public long PreferenceScore { get; }
 
         public bool IsAvailable()
         {
@@ -46,6 +48,10 @@ namespace SeatsSuggestions
             }
 
             return this;
+        }
+        public Seat SetPreference(long preference)
+        {
+            return new Seat(RowName, Number, PricingCategory, SeatAvailability, preference);
         }
 
         public bool SameSeatLocation(Seat seat)
