@@ -14,9 +14,9 @@ namespace SeatsSuggestions.Tests
             AuditoriumLayout = auditoriumLayout;
         }
 
-        public ReservationsProvider Reservations { get; }
+        private ReservationsProvider Reservations { get; }
 
-        public AuditoriumLayoutRepository AuditoriumLayout { get; }
+        private AuditoriumLayoutRepository AuditoriumLayout { get; }
    
         internal SuggestionMade MakeSuggestions(string showId, int party)
         {
